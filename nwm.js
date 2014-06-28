@@ -322,7 +322,7 @@ NWM.prototype.stop = function(callback) {
   if ( callback ) {
     callback();
   }
-  quit();
+  process.exit(0);
 }
 
 if (module == require.main) {

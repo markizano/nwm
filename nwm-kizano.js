@@ -4,7 +4,8 @@
 var NWM = require('./nwm.js'),
     XK = require('./lib/keysymdef.js'),
     Xh = require('./lib/x.js'),
-    child_process = require('child_process');
+    child_process = require('child_process'),
+    path = require('path');
 
 // instantiate nwm and configure it
 var nwm = new NWM();
@@ -68,11 +69,11 @@ var keyboard_shortcuts = [
   },
   { // KIZANO
     key: 'Left', // move left and right between workspaces
-    callback: function(event){ return currentMonitor().goNext(); }
+    callback: function(event) { return currentMonitor().goPrevious(); }
   },
   {
     key: 'Right', // move left and right between workspaces
-    callback: function(event) { return currentMonitor().goPrevious(); }
+    callback: function(event){ return currentMonitor().goNext(); }
   },
   {
     key: 'BackSpace',
@@ -89,9 +90,11 @@ var keyboard_shortcuts = [
     key: 'r',
     callback: function(event) {
       function zenity_return(requested_cmd, err) {
-        console.error('\x1b[31mSpawning application\x1b[0m: ' + cmd);
+        requested_cmd = requested_cmd.trim();
+        console.log('Spawning application', requested_cmd);
         logfile = '/var/log/markizano/' + path.basename(requested_cmd).split(' ').shift() + '.log';
-        cmd = '{cmd} >{log} 2>&1'.replace('{cmd}', requested_cmd).replace('{log}', logfile)
+        cmd = '/bin/bash -c "{cmd} >{log} 2>&1"'.replace('{cmd}', requested_cmd).replace('{log}', logfile)
+        console.log('Running command', cmd)
         child_process.spawn(cmd, [], { env: process.env } );
       }
       execute('zenity --entry --text "What would you like to do?"', zenity_return);
@@ -203,7 +206,8 @@ var keyboard_shortcuts = [
     key: 'q', // quit
     modifier: [ 'shift' ],
     callback: function() {
-      process.exit();
+      nwm.stop();
+      //process.exit();
     }
   },
   {
@@ -211,7 +215,7 @@ var keyboard_shortcuts = [
     callback: function() {
       currentMonitor().goBack();
     }
-  }
+  },
 ];
 
 // take each of the keyboard shortcuts above and make add a key using nwm.addKey
