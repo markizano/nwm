@@ -66,13 +66,13 @@ var keyboard_shortcuts = [
     key: ['left', 'right'], // move left and right between workspaces
     callback: function(event) {
       cm = currentMonitor()
-      if ( event.keysym == 'left' and cm.id < 9 ) {
+      if ( event.keysym == 'left' && cm.id < 9 ) {
         cm.go(cm.id -1);
       } else if ( event.keysym == 'right' && cm.id > 1 ) {
         cm.go(cm.id +1);
       }
     }
-  }
+  },
   {
     key: 'Return', // enter key launches xterm
     modifier: [ 'shift' ],
