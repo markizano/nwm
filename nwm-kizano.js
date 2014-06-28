@@ -16,6 +16,10 @@ nwm.addLayout('monocle', layouts.monocle);
 nwm.addLayout('wide', layouts.wide);
 nwm.addLayout('grid', layouts.grid);
 
+function execute(command, callback) {
+  child_process.exec(command, function(err, stdout, stderr){ callback(stdout, stderr); });
+}
+
 // convinience functions for writing the keyboard shortcuts
 function currentMonitor() {
   return nwm.monitors.get(nwm.monitors.current);
@@ -63,22 +67,31 @@ var keyboard_shortcuts = [
     }
   },
   { // KIZANO
-    key: [ XK.Left ], // move left and right between workspaces
-    callback: function(event) {
-      currentMonitor().goNext();
-    }
+    key: 'Left', // move left and right between workspaces
+    callback: currentMonitor().goNext
   },
-  { // KIZANO
-    key: [ XK.Right], // move left and right between workspaces
-    callback: function(event) {
-      currentMonitor().goPrevious();
-    }
+  {
+    key: 'Right', // move left and right between workspaces
+    callback: currentMonitor().goPrevious
+  },
+  {
+    key: 'BackSpace',
+    callback currentMonitor().goBack
   },
   {
     key: 'Return', // enter key launches xterm
     modifier: [ 'shift' ],
     callback: function(event) {
       child_process.spawn('/usr/bin/python', ['/usr/bin/terminator'], { env: process.env });
+    }
+  },
+  {
+    key: 'r',
+    callback: function(event) {
+      function zenity_return(cmd) {
+        child_process.spawn(cmd, { env: process.env } );
+      }
+      execute('zenity --entry --text "What would you like to do?"', zenity_return);
     }
   },
   {
