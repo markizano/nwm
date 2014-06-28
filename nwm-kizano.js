@@ -68,28 +68,28 @@ var keyboard_shortcuts = [
   },
   { // KIZANO
     key: 'Left', // move left and right between workspaces
-    callback: currentMonitor().goNext
+    callback: function(event){ return currentMonitor().goNext(); }
   },
   {
     key: 'Right', // move left and right between workspaces
-    callback: currentMonitor().goPrevious
+    callback: function(event) { return currentMonitor().goPrevious(); }
   },
   {
     key: 'BackSpace',
-    callback currentMonitor().goBack
+    callback: function(event){ return currentMonitor().goBack(); }
   },
   {
     key: 'Return', // enter key launches xterm
     modifier: [ 'shift' ],
     callback: function(event) {
-      child_process.spawn('/usr/bin/python', ['/usr/bin/terminator'], { env: process.env });
+      child_process.fork('/usr/bin/python', ['/usr/bin/terminator'], { env: process.env });
     }
   },
   {
     key: 'r',
     callback: function(event) {
       function zenity_return(cmd) {
-        child_process.spawn(cmd, { env: process.env } );
+        child_process.fork(cmd, { env: process.env } );
       }
       execute('zenity --entry --text "What would you like to do?"', zenity_return);
     }
