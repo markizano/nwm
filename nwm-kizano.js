@@ -82,16 +82,25 @@ var keyboard_shortcuts = [
     key: 'Return', // enter key launches xterm
     modifier: [ 'shift' ],
     callback: function(event) {
-      child_process.fork('/usr/bin/python', ['/usr/bin/terminator'], { env: process.env });
+      child_process.spawn('/usr/bin/python', ['/usr/bin/terminator'], { env: process.env });
     }
   },
   {
     key: 'r',
     callback: function(event) {
-      function zenity_return(cmd) {
-        child_process.fork(cmd, { env: process.env } );
+      function zenity_return(requested_cmd, err) {
+        console.error('\x1b[31mSpawning application\x1b[0m: ' + cmd);
+        logfile = '/var/log/markizano/' + path.basename(requested_cmd).split(' ').shift() + '.log';
+        cmd = '{cmd} >{log} 2>&1'.replace('{cmd}', requested_cmd).replace('{log}', logfile)
+        child_process.spawn(cmd, [], { env: process.env } );
       }
       execute('zenity --entry --text "What would you like to do?"', zenity_return);
+    }
+  },
+  {
+    key: 'c',
+    callback: function(event) {
+      child_process.spawn('/usr/bin/google-chrome', [], {env: process.env});
     }
   },
   {
