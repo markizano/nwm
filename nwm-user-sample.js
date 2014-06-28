@@ -1,3 +1,5 @@
+#!/usr/bin/node
+
 // modules
 var NWM = require('./nwm.js'),
     XK = require('./lib/keysymdef.js'),
@@ -60,6 +62,17 @@ var keyboard_shortcuts = [
       monitor.windowTo(monitor.focused_window, String.fromCharCode(event.keysym));
     }
   },
+  { // KIZANO
+    key: ['left', 'right'], // move left and right between workspaces
+    callback: function(event) {
+      cm = currentMonitor()
+      if ( event.keysym == 'left' and cm.id < 9 ) {
+        cm.go(cm.id -1);
+      } else if ( event.keysym == 'right' && cm.id > 1 ) {
+        cm.go(cm.id +1);
+      }
+    }
+  }
   {
     key: 'Return', // enter key launches xterm
     modifier: [ 'shift' ],
