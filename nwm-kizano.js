@@ -63,15 +63,15 @@ var keyboard_shortcuts = [
     }
   },
   { // KIZANO
-    key: [ XK.Left, XK.Right ], // move left and right between workspaces
+    key: [ XK.Left ], // move left and right between workspaces
     callback: function(event) {
-      var montior = currentMonitor();
-      console.log( {'event': event} )
-      if ( String.fromCharCode(event.keysym) == XK.Left && cm.id > 1 ) {
-        cm.go(cm.id -1);
-      } else if ( String.fromCharCode(event.keysym) == XK.Right && cm.id < 9 ) {
-        cm.go(cm.id +1);
-      }
+      currentMonitor().goNext();
+    }
+  },
+  { // KIZANO
+    key: [ XK.Right], // move left and right between workspaces
+    callback: function(event) {
+      currentMonitor().goPrevious();
     }
   },
   {

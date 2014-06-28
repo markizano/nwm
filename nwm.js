@@ -312,6 +312,19 @@ NWM.prototype.start = function(callback) {
   }
 };
 
+NWM.prototype.stop = function(callback) {
+  var self = this;
+  
+  if ( self.wm.shutdown ) {
+    self.wm.shutdown();
+  }
+
+  if ( callback ) {
+    callback();
+  }
+  quit();
+}
+
 if (module == require.main) {
   console.log('Please run nwm via "node nwm-user-sample.js" (or some other custom config file).');
 }
