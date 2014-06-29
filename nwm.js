@@ -226,7 +226,7 @@ NWM.prototype.events = {
 
   // Mouse enters a window
   enterNotify: function(event) {
-    if ( !this.nwm.config.mouse.focus_follows_mouse ) return false;
+    if ( !this.config.mouse.focus_follows_mouse ) return false;
     if ( this.windows.exists(event.id) ) {
       var window = this.windows.get(event.id);
       console.log('focused monitor is ', this.monitors.current, 'focusing to', window.monitor, window.title);
