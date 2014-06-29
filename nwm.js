@@ -8,7 +8,8 @@
 
 var Collection = require('./lib/collection.js'),
     Monitor = require('./lib/monitor.js'),
-    Window = require('./lib/window.js');
+    Window = require('./lib/window.js'),
+    extend = require('extend');
 
 // Node Window Manager
 // -------------------
@@ -24,6 +25,21 @@ var NWM = function() {
   // windows -- this is the global storage for windows, any other objects just store ids referring to this hash.
   this.windows = new Collection(this, 'window', 1);
   this.floaters = [];
+  this.config = {
+    'workspaces': {
+      // This should be an immutable config option to prevent user tampering
+      // However, if your system can handle the load - have fun!
+      'max_workspaces': 36,
+
+      // User-configurable size of workspace count.
+      'rows': 1,
+      'cols': 4,
+
+      'wraparound': true,
+      'wraparound_same': true
+    }
+  };
+  extend(this.config, require('./prefs/config.js') );
 }
 
 require('util').inherits(NWM, require('events').EventEmitter);

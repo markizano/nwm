@@ -77,6 +77,7 @@ Todo:
 - Display full info of PropertyNotify, ClientMessage, ConfigureRequest and ConfigureNotify as nwm should not honor some requests e.g. guake Ctrl+shift+t.
 - Test reloading key bindings on the fly (C)
 - Customizable mouse key bindings (C)
+- Opacity bindings (C)
 
 # Todo (Nwm.js)
 
@@ -96,6 +97,8 @@ Lazy initialization should not exist. Errors should be thrown for non-numeric ac
 Events defined in terms of nwm.on(), eg:
 - Monitor: nwm.on('add window'), nwm.on('change window monitor'),
  nwm.on('remove window'), nwm.on('before remove monitor') should be removed and transferred to the actual event callback.
+
+When the state of a window, monitor, or workspace changes, events should fire notifying the appropriate handlers to resize and rearrange the layout, instead of calling .show()/.hide() methods each time something is updated.
 
 Layouts and workspaces should be merged.
 
