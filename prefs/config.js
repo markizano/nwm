@@ -2,7 +2,7 @@
 config = {
   'workspaces': {
     'rows': 3,
-    'cols': 4,
+    'cols': 3,
   }
 }
 

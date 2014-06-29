@@ -60,38 +60,67 @@ var keyboard_shortcuts = [
     modifier: [ 'shift' ],
     callback: function(event) {
       var monitor = currentMonitor();
-      monitor.windowTo(monitor.focused_window, String.fromCharCode(event.keysym));
+      monitor.moveWindowTo(monitor.focused_window, String.fromCharCode(event.keysym));
     }
   },
-  { // KIZANO
+  {
     key: 'Left', // move left and right between workspaces
-    callback: function(event) { return currentMonitor().goPrevious(); }
+    callback: function(event) { return currentMonitor().go('left'); }
   },
   {
     key: 'Left', // move a window left and right between workspaces with [shift]
     modifier: [ 'shift' ],
     callback: function(event) {
       var monitor = currentMonitor();
-      monitor.windowPrev(monitor.focused_window);
-      monitor.goPrevious();
+      monitor.moveWindowTo(monitor.focused_window, 'left');
+      monitor.go('left');
     }
   },
   {
     key: 'Right', // move left and right between workspaces
-    callback: function(event){ return currentMonitor().goNext(); }
+    callback: function(event){ return currentMonitor().go('right'); }
   },
   {
     key: 'Right', // move a window left and right between workspaces with [shift]
     modifier: [ 'shift' ],
     callback: function(event) {
       var monitor = currentMonitor();
-      monitor.windowNext(monitor.focused_window);
-      monitor.goNext();
+      monitor.moveWindowTo(monitor.focused_window, 'right');
+      monitor.go('right');
     }
   },
+
+  {
+    key: 'Up', // move up and down between workspaces
+    callback: function(event){ return currentMonitor().go('up'); }
+  },
+  {
+    key: 'Up', // move a window up and down between workspaces with [shift]
+    modifier: [ 'shift' ],
+    callback: function(event) {
+      var monitor = currentMonitor();
+      monitor.moveWindowTo(monitor.focused_window, 'up');
+      monitor.go('up');
+    }
+  },
+
+  {
+    key: 'Down', // move up and down between workspaces
+    callback: function(event){ return currentMonitor().go('Down'); }
+  },
+  {
+    key: 'Down', // move a window up and down between workspaces with [shift]
+    modifier: [ 'shift' ],
+    callback: function(event) {
+      var monitor = currentMonitor();
+      monitor.moveWindowTo(monitor.focused_window, 'down');
+      monitor.go('down');
+    }
+  },
+
   {
     key: 'BackSpace',
-    callback: function(event){ return currentMonitor().goBack(); }
+    callback: function(event){ return currentMonitor().go('back'); }
   },
   {
     key: 'Return', // enter key launches xterm
@@ -161,75 +190,13 @@ var keyboard_shortcuts = [
     }
   },
   {
-    key: 'comma', // moving windows between monitors
-    modifier: [ 'shift' ],
-    callback: function(event) {
-      var monitor = currentMonitor();
-      var window = nwm.windows.get(monitor.focused_window);
-      if(window) { // empty if no windows
-        moveToMonitor(window, monitor, nwm.monitors.next(window.monitor));
-      }
-    }
-  },
-  {
-    key: 'period', // moving windows between monitors
-    modifier: [ 'shift' ],
-    callback: function(event) {
-      var monitor = currentMonitor();
-      var window = nwm.windows.get(monitor.focused_window);
-      if(window) { // empty if no windows
-        moveToMonitor(window, monitor, nwm.monitors.prev(window.monitor));
-      }
-    }
-  },
-  {
-    key: 'j', // moving focus
-    callback: function() {
-      var monitor = currentMonitor();
-      if(monitor.focused_window && nwm.windows.exists(monitor.focused_window)) {
-        var window = nwm.windows.get(monitor.focused_window);
-        do {
-          var previous = nwm.windows.prev(window.id);
-          window = nwm.windows.get(previous);
-        }
-        while(window.workspace != monitor.workspaces.current);
-        console.log('Current', monitor.focused_window, 'previous', window.id);
-        monitor.focused_window = window.id;
-        nwm.wm.focusWindow(window.id);
-      }
-    }
-  },
-  {
-    key: 'k', // moving focus
-    callback: function() {
-      var monitor = currentMonitor();
-      if(monitor.focused_window && nwm.windows.exists(monitor.focused_window)) {
-        var window = nwm.windows.get(monitor.focused_window);
-        do {
-          var next = nwm.windows.next(window.id);
-          window = nwm.windows.get(next);
-        }
-        while(window.workspace != monitor.workspaces.current);
-        console.log('Current', monitor.focused_window, 'next', window.id);
-        monitor.focused_window = window.id;
-        nwm.wm.focusWindow(monitor.focused_window);
-      }
-    }
-  },
-  {
     key: 'q', // quit
     modifier: [ 'shift' ],
     callback: function() {
       nwm.stop();
       //process.exit();
     }
-  },
-  {
-    key: 'BackSpace',
-    callback: function() {
-      currentMonitor().goBack();
-    }
-  },
+  }
 ];
 
 // take each of the keyboard shortcuts above and make add a key using nwm.addKey

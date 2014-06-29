@@ -39,7 +39,7 @@ var NWM = function() {
       'wraparound_same': true
     }
   };
-  extend(this.config, require('./prefs/config.js') );
+  extend(true, this.config, require('./prefs/config.js') );
 }
 
 require('util').inherits(NWM, require('events').EventEmitter);
