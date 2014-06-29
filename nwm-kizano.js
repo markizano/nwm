@@ -72,8 +72,26 @@ var keyboard_shortcuts = [
     callback: function(event) { return currentMonitor().goPrevious(); }
   },
   {
+    key: 'Left', // move a window left and right between workspaces with [shift]
+    modifier: [ 'shift' ],
+    callback: function(event) {
+      cm = currentMonitor();
+      monitor.windowPrev(monitor.focused_window);
+      cm.goPrevious();
+    }
+  },
+  {
     key: 'Right', // move left and right between workspaces
     callback: function(event){ return currentMonitor().goNext(); }
+  },
+  {
+    key: 'Right', // move a window left and right between workspaces with [shift]
+    modifier: [ 'shift' ],
+    callback: function(event) {
+      cm = currentMonitor();
+      monitor.windowNext(monitor.focused_window);
+      cm.goNext();
+    }
   },
   {
     key: 'BackSpace',
