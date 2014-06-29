@@ -75,9 +75,9 @@ var keyboard_shortcuts = [
     key: 'Left', // move a window left and right between workspaces with [shift]
     modifier: [ 'shift' ],
     callback: function(event) {
-      cm = currentMonitor();
+      var monitor = currentMonitor();
       monitor.windowPrev(monitor.focused_window);
-      cm.goPrevious();
+      monitor.goPrevious();
     }
   },
   {
@@ -88,9 +88,9 @@ var keyboard_shortcuts = [
     key: 'Right', // move a window left and right between workspaces with [shift]
     modifier: [ 'shift' ],
     callback: function(event) {
-      cm = currentMonitor();
+      var monitor = currentMonitor();
       monitor.windowNext(monitor.focused_window);
-      cm.goNext();
+      monitor.goNext();
     }
   },
   {
