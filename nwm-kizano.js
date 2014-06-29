@@ -48,10 +48,6 @@ function resizeWorkspace(increment) {
 // Change the base modifier to your liking e.g. Xh.Mod4Mask if you just want to use the meta key without Ctrl
 var baseModifier = Xh.Mod4Mask; // Win key
 
-if ( process.env.DISPLAY && process.env.DISPLAY == ':1' ) {
-  baseModifier = Xh.Mod4Mask|Xh.ControlMask; // Win + Ctrl
-}
-
 var keyboard_shortcuts = [
   {
     key: [1, 2, 3, 4, 5, 6, 7, 8, 9], // number keys are used to move between screens
