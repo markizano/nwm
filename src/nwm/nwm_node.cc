@@ -234,6 +234,19 @@ static Handle<Value> KillWindow(const Arguments& args) {
   return Undefined();
 }
 
+/* // I don't know enough about C++ at this time to do this right.
+static Handle<Integer> GetWindowOpacity(const Arguments& args) {
+  HandleScope scope;
+  return nwm_get_window_opacity(args[0]->Uint32Value());
+}
+*/
+
+static Handle<Value> SetWindowOpacity(const Arguments& args) {
+  HandleScope scope;
+  nwm_set_window_opacity(args[0]->Uint32Value(), args[1]->IntegerValue());
+  return Undefined();
+}
+
 static Handle<Value> ConfigureWindow(const Arguments& args) {
   HandleScope scope;
   nwm_configure_window(args[0]->Uint32Value(), args[1]->IntegerValue(),
@@ -266,6 +279,7 @@ extern "C" {
     target->Set(String::New("resizeWindow"), FunctionTemplate::New(ResizeWindow)->GetFunction());
     target->Set(String::New("focusWindow"), FunctionTemplate::New(FocusWindow)->GetFunction());
     target->Set(String::New("killWindow"), FunctionTemplate::New(KillWindow)->GetFunction());
+    target->Set(String::New("setWindowOpacity"), FunctionTemplate::New(SetWindowOpacity)->GetFunction());
     target->Set(String::New("configureWindow"), FunctionTemplate::New(ConfigureWindow)->GetFunction());
     target->Set(String::New("notifyWindow"), FunctionTemplate::New(NotifyWindow)->GetFunction());
     // Setting up

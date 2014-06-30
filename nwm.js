@@ -25,6 +25,7 @@ var NWM = function() {
   // windows -- this is the global storage for windows, any other objects just store ids referring to this hash.
   this.windows = new Collection(this, 'window', 1);
   this.floaters = [];
+
   this.config = {
     'workspaces': {
       // This should be an immutable config option to prevent user tampering
@@ -43,6 +44,8 @@ var NWM = function() {
       'focus_follows_mouse': false,
     }
   };
+
+  // @TODO: if global config exists (/etc/nwm/config.js) - extend that as well
   extend(true, this.config, require('./prefs/config.js') );
 }
 
@@ -50,30 +53,33 @@ require('util').inherits(NWM, require('events').EventEmitter);
 
 // Events
 // ------
-NWM.prototype.events = {
-  // Monitor events
-  // --------------
+NWM.prototype
+// Monitor events
+// --------------
+.on(
   // A new monitor is added
-  addMonitor: function(monitor) {
+  'monitor.add', function(monitor) {
     this.monitors.add(new Monitor(this, monitor));
     this.monitors.current = monitor.id;
-  },
-
+  }
+).on(
   // A monitor is updated
-  updateMonitor: function(monitor) {
+  'monitor.update', function(monitor) {
     this.monitors.update(monitor.id, monitor);
-  },
-
+  }
+).on(
   // A monitor is removed
-  removeMonitor: function(id) {
+  'monitor.remove', function(id) {
     console.log('Remove monitor', id);
     this.monitors.remove(function(monitor) { return (monitor.id != id); });
-  },
+  }
+);
 
-  // Window events
-  // -------------
+// Window events
+// -------------
+NWM.prototype.on(
   // A new window is added
-  addWindow: function(window) {
+  'window.add', function(window) {
     if ( window.id) {
       var current_monitor = this.monitors.get(this.monitors.current);
       window.workspace = current_monitor.workspaces.current;
@@ -107,10 +113,10 @@ NWM.prototype.events = {
       });
       this.windows.add(win);
     }
-  },
-
+  }
+).on(
   // When a window is removed
-  removeWindow: function(window) {
+  'window.remove', function(window) {
     this.windows.remove(function(item) {
       if ( item && item.id && window.id) {
         return (item.id != window.id);
@@ -126,11 +132,11 @@ NWM.prototype.events = {
     // moved rearrange here to ensure that it occurs after everything else
     var current_monitor = this.monitors.get(this.monitors.current);
     current_monitor.workspaces.get(current_monitor.workspaces.current).rearrange();
-  },
-
+  }
+).on(
   // When a window is updated
   // This is only triggered for title and class updates, never coordinates or monitors.
-  updateWindow: function(window) {
+  'window.update', function(window) {
     if ( this.windows.exists(window.id)) {
       var old = this.windows.get(window.id);
       this.windows.update(window.id, {
@@ -138,10 +144,10 @@ NWM.prototype.events = {
         class: window.class || old.class || ''
       });
     }
-  },
-
+  }
+).on(
   // When a window requests full screen mode
-  fullscreen: function(id, status) {
+  'fullscreen', function(id, status) {
     console.log('Client Fullscreen', id, status);
     console.log(id, '!! exists? ', this.windows.exists(id));
     if ( this.windows.exists(id)) {
@@ -204,13 +210,18 @@ NWM.prototype.events = {
     }
   },
 
+  // Window events
+  rearrange: function(event) {
+    this.nwm.layouts[this.layout](this);
+  },
+
   // Mouse events
   // ------------
   // A mouse button has been clicked
   mouseDown: function(event) {
-    if ( this.windows.exists(event.id) ) {
+//    if ( this.windows.exists(event.id) ) {
       this.wm.focusWindow(event.id);
-    }
+//    }
   },
 
   // A mouse drag is in progress
@@ -287,7 +298,7 @@ NWM.prototype.events = {
     });
   }
 };
-
+//*/
 // Layout operations
 // -----------------
 
@@ -354,3 +365,4 @@ if (module == require.main) {
 }
 
 module.exports = NWM;
+

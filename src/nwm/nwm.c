@@ -29,6 +29,8 @@ static void nwm_scan_monitors();
 void nwm_add_monitor();
 void nwm_remove_monitor();
 void nwm_update_selected_monitor();
+int nwm_get_window_opacity(Window win);
+void nwm_set_window_opacity(Window win, unsigned int opacity);
 
 static void nwm_emit(callback_map event, void *ev);
 
@@ -287,6 +289,24 @@ void nwm_kill_window(Window win) {
     XSetErrorHandler(xerror);
     XUngrabServer(nwm.dpy);
   }
+}
+
+#define OPACITY "_NET_WM_WINDOW_OPACITY"
+int nwm_get_window_opacity(Window win) {
+  Atom actual;
+  int format;
+  unsigned int opacity;
+  unsigned long n, left;
+  unsigned char *data = NULL;
+  XGetWindowProperty(nwm.dpy, win, XInternAtom(nwm.dpy, OPACITY, False), 0L, 1L, False, XA_CARDINAL, &actual, &format, &n, &left, (unsigned char **) &data);
+  memcpy(&opacity, data, sizeof(unsigned int) );
+  XFree( (void*) data );
+  return opacity;
+}
+
+void nwm_set_window_opacity(Window win, unsigned int opacity) {
+  XChangeProperty(nwm.dpy, win, XInternAtom(nwm.dpy, OPACITY, False),  XA_CARDINAL, 32, PropModeReplace, (unsigned char *) &opacity, 1L);
+  XFlush(nwm.dpy);
 }
 
 void nwm_configure_window(Window win, int x, int y, int width, int height,

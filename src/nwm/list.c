@@ -14,7 +14,7 @@ List* List_push(List **list, void *data) {
   newnode->next = *list;
   *list = newnode;
 
-  fprintf(stdout, "list item data pointer %p.\n", data);
+  //fprintf(stdout, "list item data pointer %p.\n", data);
   return newnode;
 }
 

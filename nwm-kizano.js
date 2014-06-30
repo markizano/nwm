@@ -158,30 +158,7 @@ var keyboard_shortcuts = [
     }
   },
   {
-    key: 'space', // space switches between layout modes
-    callback: function(event) {
-      var monitor = currentMonitor();
-      var workspace = monitor.currentWorkspace();
-      workspace.layout = nwm.nextLayout(workspace.layout);
-      // monocle hides windows in the current workspace, so unhide them
-      monitor.go(monitor.workspaces.current);
-      workspace.rearrange();
-    }
-  },
-  {
-    key: ['h', 'F10'], // shrink master area
-    callback: function(event) {
-      resizeWorkspace(-5);
-    }
-  },
-  {
-    key: ['l', 'F11'], // grow master area
-    callback: function(event) {
-      resizeWorkspace(+5);
-    }
-  },
-  {
-    key: 'Tab', // tab makes the current window the main window
+    key: 'Tab', // @TODO: Alternate between active windows in the workspace
     callback: function(event) {
       var monitor = currentMonitor();
       var workspace = monitor.currentWorkspace();

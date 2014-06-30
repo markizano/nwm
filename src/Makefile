@@ -1,16 +1,15 @@
 
-all: nwm
 
 nwm:
 	gcc -std=c99 -pedantic -Wall -I./include/nwm ./src/nwm/nwm.c -o ./nwm
-
+all: nwm
 
 test: clean list.test.c run
 
 list.test.c:
 	gcc -std=c99 -pedantic -Wall -I./include -I./include/list ./src/list/list.c ./tests/list.test.c -o ./tests/list.test
 
-.PHONY: clean run
+.PHONY: clean run nwm
 
 clean:
 	rm -f ./tests/list.test
